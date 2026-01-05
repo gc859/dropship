@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dropship Inc. Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#f8f9fa; color:#333; scroll-behavior:smooth;}
+  
+  /* Header */
+  header { background:#fff; padding:15px 50px; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; transition:box-shadow 0.3s;}
+  header.scrolled { box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+  header .logo { font-weight:700; font-size:24px; color:#1976d2;}
+  header nav a { margin-left:25px; text-decoration:none; color:#555; font-weight:500; transition:color 0.3s;}
+  header nav a:hover { color:#1976d2;}
+  
+  /* Container */
+  .container { max-width:1200px; margin:50px auto; padding:0 20px;}
+  h1 { text-align:center; font-weight:700; margin-bottom:10px; color:#1976d2;}
+  p { text-align:center; margin-bottom:20px; font-weight:500; color:#555;}
+  
+  /* CTA Button */
+  .btn { background:linear-gradient(135deg,#1976d2,#42a5f5); color:#fff; padding:12px 28px; border-radius:8px; border:none; cursor:pointer; font-weight:600; transition: all 0.3s; display:inline-block; text-decoration:none; font-size:16px;}
+  .btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(25,118,210,0.3);}
+  
+  /* Metrics Cards */
+  .metrics { display:flex; justify-content:space-around; flex-wrap:wrap; margin-bottom:50px; }
+  .metric-card { background:#fff; padding:20px 30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:center; margin:10px; flex:1 1 200px; transition: all 0.3s; }
+  .metric-card:hover { transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+  .metric-card h2 { font-size:28px; margin:10px 0 5px; color:#1976d2;}
+  .metric-card span { font-size:18px; color:#555;}
+  .metric-card .trend { font-size:18px; font-weight:600; display:inline-flex; align-items:center; margin-top:5px;}
+  .trend.up { color:#28a745; } .trend.down { color:#dc3545; } .trend.flat { color:#555;}
+  
+  canvas { background:#fff; border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-bottom:80px;}
+  
+  /* Sections */
+  section { margin-bottom:80px;}
+  section h2 { text-align:center; color:#1976d2; font-weight:700; margin-bottom:30px;}
+  .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:20px;}
+  .card { background:#fff; flex:1 1 250px; border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:center; transition:all 0.3s;}
+  .card:hover { transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.12);}
+  .card h3 { color:#1976d2; margin-bottom:10px;}
+  .card p { color:#555;}
+  .card .btn-section { margin-top:15px; }
+  
+  /* Footer */
+  footer { background:#fff; padding:30px 50px; text-align:center; box-shadow:0 -2px 8px rgba(0,0,0,0.08);}
+  footer a { color:#555; margin:0 10px; text-decoration:none; font-weight:500; transition:color 0.3s;}
+  footer a:hover { color:#1976d2;}
+  
+  /* Floating CTA */
+  .floating-cta {
+    position:fixed;
+    bottom:20px; right:20px;
+    z-index:100;
+    box-shadow:0 6px 20px rgba(25,118,210,0.3);
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="logo">Dropship Inc.</div>
+  <nav>
+    <a href="#product-library">Product Library</a>
+    <a href="#overview">Overview</a>
+    <a href="#ad-library">Ad Library</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#build-store">Build a Store</a>
+    <a href="#university">Dropship University</a>
+    <a href="#suppliers">Suppliers</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- Hero Section -->
+  <h1>Dropship Inc. Dashboard</h1>
+  <p>Tracking your daily revenue and orders in real-time</p>
+  <div style="text-align:center; margin-bottom:50px;">
+    <a href="#build-store" class="btn">Build Your Store</a>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric-card">
+      <span>Daily Revenue</span>
+      <h2>$42,731</h2>
+      <div class="trend up">📈 +8%</div>
+    </div>
+    <div class="metric-card">
+      <span>Orders Today</span>
+      <h2>17</h2>
+      <div class="trend down">📉 -2%</div>
+    </div>
+    <div class="metric-card">
+      <span>Total Customers</span>
+      <h2>3,421</h2>
+      <div class="trend up">📈 +1%</div>
+    </div>
+    <div class="metric-card">
+      <span>Active Suppliers</span>
+      <h2>12</h2>
+      <div class="trend flat">➡ 0%</div>
+    </div>
+  </div>
+
+  <!-- Line Chart -->
+  <canvas id="revenueChart"></canvas>
+
+  <!-- Product Library Section -->
+  <section id="product-library">
+    <h2>Product Library</h2>
+    <div class="cards">
+      <div class="card"><h3>Self-Stirring Mug</h3><p>Optimized beverage consumption efficiency.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Add Product</a></div>
+      </div>
+      <div class="card"><h3>Desktop Zen Garden</h3><p>Maximize focus during high-stress emails.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Add Product</a></div>
+      </div>
+      <div class="card"><h3>Portable Hole</h3><p>Take it anywhere… for reasons.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Add Product</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build Store Section -->
+  <section id="build-store">
+    <h2>Build a Store</h2>
+    <div class="cards">
+      <div class="card"><h3>Connect Your Store</h3><p>Integrate Shopify, WooCommerce, and more.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Start Now</a></div>
+      </div>
+      <div class="card"><h3>Add Products</h3><p>Import products from top suppliers instantly.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Start Now</a></div>
+      </div>
+      <div class="card"><h3>Automate Fulfillment</h3><p>Let our system handle orders and shipping.</p>
+        <div class="btn-section"><a href="#build-store" class="btn">Start Now</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- University Section -->
+  <section id="university">
+    <h2>Dropship University</h2>
+    <div class="cards">
+      <div class="card"><h3>Beginner Course</h3><p>Learn the basics of dropshipping.</p>
+        <div class="btn-section"><a href="#university" class="btn">Enroll Now</a></div>
+      </div>
+      <div class="card"><h3>Advanced Marketing</h3><p>Master ads, funnels, and scaling strategies.</p>
+        <div class="btn-section"><a href="#university" class="btn">Enroll Now</a></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
+</footer>
+
+<!-- Floating CTA -->
+<a href="#build-store" class="btn floating-cta">Build Your Store</a>
+
+<script>
+  // Sticky header
+  window.addEventListener('scroll', function(){
+    const header = document.getElementById('header');
+    if(window.scrollY>20) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+
+  // Revenue Chart
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  const revenueChart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets:[{
+        label:'Revenue ($)',
+        data:[8500,10200,9750,11480,13600,15900,14720],
+        borderColor:'#1976d2',
+        backgroundColor:'rgba(25,118,210,0.1)',
+        tension:0.4,
+        fill:true,
+        pointBackgroundColor:'#1976d2',
+        pointRadius:6
+      }]
+    },
+    options:{
+      responsive:true,
+      animation:{duration:1000},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:function(context){
+              const change = context.dataIndex>0 ? context.dataset.data[context.dataIndex]-context.dataset.data[context.dataIndex-1] : 0;
+              const arrow = change>0 ? '📈 +' : change<0 ? '📉 ' : '➡ ';
+              return arrow+Math.abs(change)+' from previous day';
+            }
+          }
+        }
+      },
+      scales:{
+        y:{beginAtZero:true, ticks:{color:'#555'}, grid:{color:'rgba(0,0,0,0.05)'}},
+        x:{ticks:{color:'#555'}, grid:{color:'rgba(0,0,0,0.05)'}}
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
